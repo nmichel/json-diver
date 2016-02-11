@@ -1,0 +1,23 @@
+#displays {
+    width: 100%;
+}
+
+#doc, #cap {
+    display: inline-block;
+    width: 50%;
+    height: 500px;
+}
+
+#cap {
+    position: absolute;
+    right: 0;
+}
+
+#inputs {
+    width: 100%;
+}
+
+#pattern {
+    width: 100%;
+}
+
