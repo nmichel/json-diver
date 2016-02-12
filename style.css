@@ -1,14 +1,27 @@
-#displays {
+#texts {
     width: 100%;
 }
 
-#doc, #cap {
+#text_doc, #text_cap {
     display: inline-block;
+    height: 10%;
+    resize: none;
     width: 50%;
-    height: 500px;
 }
 
-#cap {
+#text_cap {
+    position: absolute;
+    right: 0;
+}
+
+#html_doc, #html_cap {
+    display: inline-block;
+    width: 50%;
+    height: 80%;
+    overflow: scroll;
+}
+
+#html_cap {
     position: absolute;
     right: 0;
 }
@@ -21,3 +34,36 @@
     width: 100%;
 }
 
+.json-diver-list::before {
+    content: '[';
+}
+.json-diver-list::after {
+    content: ']';
+}
+
+.json-diver-list > div {
+    margin-left: 10px;
+}
+
+.json-diver-object::before {
+    content: '{';
+}
+.json-diver-object::after {
+    content: '}';
+}
+.json-diver-object > div {
+    margin-left: 10px;
+}
+
+.json-diver-pair {
+    padding-left: 2px;
+    border-left: 1px solid;
+}
+.json-diver-pair:last-child {
+    margin-bottom: 5px;
+}
+
+.json-diver-key, .json-diver-value {
+    display: inline-block;
+    vertical-align: top;
+}

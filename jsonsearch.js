@@ -4,23 +4,113 @@ window.onload = function() {
         generator = require('generator')
 
     var ePattern = document.getElementById('pattern'),
-        eDoc = document.getElementById('doc'),
-        eCap = document.getElementById('cap'),
-        tm = null
+        eDoc = document.getElementById('text_doc'),
+        eCap = document.getElementById('text_cap'),
+        eHtmlDoc = document.getElementById('html_doc'),
+        eHtmlCap = document.getElementById('html_cap'),
+        tm = null,
+        json = null,
+        jsonDecorated = null
+
+    var build_json_tree = null
+    
+    var build_json_tree_object = function(v, eRoot) {
+        eRoot.setAttribute('class', 'json-diver-object')
+        
+        for (var k in v) {
+            var ePair = document.createElement('div')
+            ePair.setAttribute('class', 'json-diver-pair')
+            
+            var eKey = document.createElement('div')
+            eKey.setAttribute('class', 'json-diver-key')
+            eKey.innerHTML = k
+            ePair.appendChild(eKey)
+            
+            var eValue = document.createElement('div')
+            eValue.setAttribute('class', 'json-diver-value')
+            
+            build_json_tree(v[k], eValue)
+            ePair.appendChild(eValue)
+            
+            eRoot.appendChild(ePair)
+        }
+    }
+    
+    var build_json_tree_list = function(v, eRoot) {
+        eRoot.setAttribute('class', 'json-diver-list')
+        
+        for (var i = 0; i < v.length; ++i) {
+            var ePair = document.createElement('div')
+            ePair.setAttribute('class', 'json-diver-pair')
+            
+            var eKey = document.createElement('div')
+            eKey.setAttribute('class', 'json-diver-key')
+            eKey.innerHTML = '' + i
+            ePair.appendChild(eKey)
+            
+            var eValue = document.createElement('div')
+            eValue.setAttribute('class', 'json-diver-value')
+            
+            build_json_tree(v[i], eValue)
+            ePair.appendChild(eValue)
+            
+            eRoot.appendChild(ePair)
+        }
+    }
+
+    build_json_tree = function(j, eRoot) {
+        var eNode = document.createElement('div')
+        eNode.setAttribute('priv_id', j.id__)
+
+        var v = j.value__
+        if (isObject(v)) {
+            build_json_tree_object(v, eNode)
+        } else if (isArray(v)) {
+            build_json_tree_list(v, eNode)
+        }
+        else {
+            var c = document.createElement('span'),
+                cstr = '' + v
+            if (typeof v === "string") {
+                cstr = '"' + cstr + '"'
+            }
+            c.innerHTML = '' + cstr
+            eNode.appendChild(c)
+        }
+
+        eRoot.appendChild(eNode)
+    }
 
     function applypattern() {
+        if (! jsonDecorated) {
+            return // <== 
+        }
+        
         var p = ePattern.value 
 
         try {
             var ast = jjpet.parse(p),
+                f = jjpet.generate(ast),
                 fw = jjpet.generate(visitor.visit(ast, ast_decorator))
 
-            var j = JSON.parse(eDoc.value),
-                jw = decorate_json(j)
+            var r = fw(jsonDecorated)
 
-            var r = fw(jw)
-            
-            eCap.value = JSON.stringify(r)
+            eCap.value = JSON.stringify(f(json))
+
+            eHtmlCap.innerHTML = ''
+            for (var k in r.captures) {
+                var pair = document.createElement('div'),
+                    key = document.createElement('div'),
+                    vals = document.createElement('div')
+                key.innerHTML = k
+                pair.appendChild(key)
+                pair.appendChild(vals)
+                var caps = r.captures[k]
+                for (var i = 0; i < caps.length; ++i) {
+                    build_json_tree(caps[i], vals)
+                }
+                eHtmlCap.appendChild(pair)
+            }
         }
         catch (e) {
         }
@@ -32,24 +122,44 @@ window.onload = function() {
         try {
             var ast = jjpet.parse(p)
             ePattern.style.color = 'green'
+            applypattern()
         }
         catch (e) {
             ePattern.style.color = 'red'
         }
     }
 
-    ePattern.addEventListener('input', function(e) {
+    ePattern.addEventListener('input', function() {
         window.clearTimeout(tm)
-        tm = window.setTimeout(analyzeinput, 300)
+        analyzeinput()
+        // tm = window.setTimeout(analyzeinput, 300)
     })
-    ePattern.addEventListener('keydown', function(e) {
-        if (e.keyCode == 13) {
-            window.clearTimeout(tm)
-            analyzeinput()
-            applypattern()
-        }
+    // ePattern.addEventListener('keydown', function(e) {
+    //     if (e.keyCode == 13) {
+    //         window.clearTimeout(tm)
+    //         analyzeinput()
+    //         applypattern()
+    //     }
+    // })
+
+    function isObject(what) {
+        return what != null && what instanceof Object && !(what instanceof Array)
+    }
+
+    function isArray(what) {
+        return what != null && what instanceof Array
+    }
+
+    eDoc.addEventListener('input', function() {
+        json = JSON.parse(eDoc.value)
+        jsonDecorated = decorate_json(json)
+        eHtmlDoc.innerHTML = ''
+        build_json_tree(jsonDecorated, eHtmlDoc)
+        
+        applypattern()
     })
 
+/*
     var t = jjpet.parse('{_:42}')
     var tw = visitor.visit(t, ast_decorator)
     var f = jjpet.generate(tw)
@@ -77,5 +187,5 @@ window.onload = function() {
     var fw = generator.generate(visitor.visit(jjpet.parse('<!(?<l>[*, 42])!>/g'), ast_decorator))
     var nw = decorate_json({"a": [1, 42], "b": [2, 42], "c": [{"c1": false}, {"c2": [3, 42]}, 42], "d": {}})
     fw(nw)
-
+*/
 }

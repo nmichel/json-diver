@@ -2,6 +2,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; utf8">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"></link>
     <link rel="stylesheet" href="style.css"></link>
 
     <script type="text/javascript" src="jjpet-0.3.0-dist.js"></script>
@@ -9,16 +10,20 @@
     <script type="text/javascript" src="visitor.js"></script>
     <script type="text/javascript" src="jsonsearch.js"></script>
 
-    <title>jsonsearch</title>
+    <title>json-diver</title>
   </head>
   
   <body>
-    <div id="displays">
-      <textarea id="doc"></textarea>
-      <textarea id="cap" readonly></textarea>
+    <div id="texts">
+      <textarea id="text_doc">[[1,42], [2,3, 42], "foo", {"key": ["a", false, 42]}]</textarea>
+      <textarea id="text_cap" readonly></textarea>
+    </div>
+    <div id="htmls">
+      <div id="html_doc"></div>
+      <div id="html_cap"></div>
     </div>
     <div id="inputs">
-      <input id="pattern" type="text"></input>
+      <input id="pattern" type="text" value="<!(?<c>[*,42])!>/g"></input>
     </div>
   </body>
 </html>
