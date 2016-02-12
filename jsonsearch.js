@@ -12,10 +12,34 @@ window.onload = function() {
         json = null,
         jsonDecorated = null
 
+    function build_on_click_handler(eTgt) {
+        var eTgt = eTgt
+        return function(e) {
+            var tgtClassList = eTgt.classList,
+                ctrClassList = e.srcElement.classList
+            if (tgtClassList.contains('json-diver-hidden')) {
+                tgtClassList.remove('json-diver-hidden')
+                ctrClassList.remove('fa-plus-square-o')
+                ctrClassList.add('fa-minus-square-o')
+            }
+            else {
+                tgtClassList.add('json-diver-hidden')
+                ctrClassList.add('fa-plus-square-o')
+                ctrClassList.remove('remove-minus-square-o')
+            }
+        }
+    }
+    
     var build_json_tree = null
     
     var build_json_tree_object = function(v, eRoot) {
         eRoot.setAttribute('class', 'json-diver-object')
+
+        var eContent = document.createElement('div')
+        
+        var eCtrl = document.createElement('i')
+        eCtrl.setAttribute('class', 'fa fa-minus-square-o')
+        eCtrl.addEventListener('click', build_on_click_handler(eContent))
         
         for (var k in v) {
             var ePair = document.createElement('div')
@@ -32,12 +56,22 @@ window.onload = function() {
             build_json_tree(v[k], eValue)
             ePair.appendChild(eValue)
             
-            eRoot.appendChild(ePair)
+            eContent.appendChild(ePair)
         }
+        
+        eRoot.appendChild(eCtrl)
+        eRoot.appendChild(eContent)
     }
     
     var build_json_tree_list = function(v, eRoot) {
         eRoot.setAttribute('class', 'json-diver-list')
+
+        var eContent = document.createElement('div')
+        
+        var eCtrl = document.createElement('i')
+        eCtrl.setAttribute('class', 'fa fa-minus-square-o')
+        eCtrl.addEventListener('click', build_on_click_handler(eContent))
+        eRoot.appendChild(eCtrl)
         
         for (var i = 0; i < v.length; ++i) {
             var ePair = document.createElement('div')
@@ -54,8 +88,11 @@ window.onload = function() {
             build_json_tree(v[i], eValue)
             ePair.appendChild(eValue)
             
-            eRoot.appendChild(ePair)
+            eContent.appendChild(ePair)
         }
+        
+        eRoot.appendChild(eCtrl)
+        eRoot.appendChild(eContent)
     }
 
     build_json_tree = function(j, eRoot) {

@@ -1,3 +1,8 @@
+body {
+    font-family: 'Roboto';
+    font-style: normal;
+}
+
 #texts {
     width: 100%;
 }
@@ -15,6 +20,7 @@
 }
 
 #html_doc, #html_cap {
+    background-color: rgb(130, 173, 211);
     display: inline-block;
     width: 50%;
     height: 80%;
@@ -34,11 +40,19 @@
     width: 100%;
 }
 
+i {
+    vertical-align: middle;
+}
+
 .json-diver-list::before {
-    content: '[';
+    content: '[ ';
+    font-size: 1.3em;
+    font-weight: bolder;
 }
 .json-diver-list::after {
-    content: ']';
+    content: ' ]';
+    font-size: 1.3em;
+    font-weight: bolder;
 }
 
 .json-diver-list > div {
@@ -46,24 +60,40 @@
 }
 
 .json-diver-object::before {
-    content: '{';
+    content: '{ ';
+    font-size: 1.3em;
+    font-weight: bolder;
 }
 .json-diver-object::after {
-    content: '}';
+    content: ' }';
+    font-size: 1.3em;
+    font-weight: bolder;
 }
 .json-diver-object > div {
     margin-left: 10px;
 }
 
 .json-diver-pair {
-    padding-left: 2px;
     border-left: 1px solid;
-}
-.json-diver-pair:last-child {
-    margin-bottom: 5px;
+    padding-bottom: 5px;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
 }
 
 .json-diver-key, .json-diver-value {
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
+}
+
+.json-diver-key {
+    background-color: #ededed;
+    padding: 0.5em;
+}
+
+.json-diver-value {
+    padding-left: 10px;
+}
+
+.json-diver-hidden {
+    display: none;
 }
