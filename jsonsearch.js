@@ -12,6 +12,28 @@ window.onload = function() {
         json = null,
         jsonDecorated = null
 
+    eHtmlCap.addEventListener('click', function(e) {
+        var eSrc = e.srcElement,
+            privId = eSrc.getAttribute('priv_id')
+            
+        while (! privId && (eSrc = eSrc.parentElement)) {
+            privId = eSrc.getAttribute('priv_id')
+        }
+        if (! privId) {
+            return // <== 
+        }
+        
+        var privIdVal = parseInt(privId),
+            eTgt = document.querySelector('#html_doc *[priv_id="'+privIdVal+'"]')
+        
+        var tgtList = document.querySelectorAll('*[priv_id]')
+        for (var i = 0; i < tgtList.length; ++i) {
+          tgtList[i].classList.remove('json-diver-active')
+        }
+        eTgt.classList.add('json-diver-active')
+        eSrc.classList.add('json-diver-active')
+    })
+
     function build_on_click_handler(eTgt) {
         var eTgt = eTgt
         return function(e) {
