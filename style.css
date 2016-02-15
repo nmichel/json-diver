@@ -1,0 +1,141 @@
+body {
+    font-family: 'Roboto';
+    font-style: normal;
+}
+
+.json-diver-panel {
+    width: 50%;
+    float: left;
+    overflow-y: scroll;
+    background-color: A0A0A0;
+}
+
+.text {
+    height: 10%;
+    position: relative;
+}
+
+#texts {
+    width: 100%;
+}
+
+#text_doc, #text_cap {
+    height: 100%;
+    resize: none;
+    width: 100%;
+}
+
+#text_cap {
+    position: absolute;
+    right: 0;
+}
+
+.tree {
+    height: 80%;
+}
+
+#htmls {
+    clear: both;
+}
+
+#html_doc, #html_cap {
+    background-color: rgb(130, 173, 211);
+    margin: 10px;
+}
+
+#inputs {
+    clear: both;
+    padding: 10px 0 10px 0;
+    width: 100%;
+}
+
+#pattern {
+    border: none;
+    border-bottom: solid 2px #A0A0A0;
+    font-size: 1.3em;
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    width: 100%;
+}
+#pattern:focus {
+    border: none;
+    border-bottom: solid 2px rgb(130, 173, 211);
+    outline: none;
+    transition: border-color 0.5s;
+}
+
+i {
+    vertical-align: middle;
+}
+
+.json-diver-list, .json-diver-object {
+    padding: 0.5em;
+}
+
+.json-diver-list::before {
+    content: '[ ';
+    font-size: 1.3em;
+    font-weight: bolder;
+}
+.json-diver-list::after {
+    content: ' ]';
+    font-size: 1.3em;
+    font-weight: bolder;
+}
+
+.json-diver-list > div {
+    margin-left: 10px;
+}
+
+.json-diver-object::before {
+    content: '{ ';
+    font-size: 1.3em;
+    font-weight: bolder;
+}
+.json-diver-object::after {
+    content: ' }';
+    font-size: 1.3em;
+    font-weight: bolder;
+}
+.json-diver-object > div {
+    margin-left: 10px;
+}
+
+.json-diver-pair {
+    border-left: 1px solid;
+    padding-bottom: 5px;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+}
+
+.json-diver-key, .json-diver-value {
+    display: inline-block;
+    font-size: 12px;
+    vertical-align: middle;
+}
+
+.json-diver-key {
+    background-color: #ededed;
+    padding: 0.5em;
+}
+
+.json-diver-value {
+    padding-left: 10px;
+}
+
+.json-diver-hidden {
+    display: none;
+}
+
+.json-diver-active {
+    background-color: #07A;
+    transition: background-color 0.5s;
+}
+
+.json-diver-ok {
+    background-color: #BDFFAE;
+}
+
+.json-diver-ko {
+    background-color: #FFAEAE;
+}
