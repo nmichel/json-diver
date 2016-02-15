@@ -32,6 +32,8 @@ window.onload = function() {
         }
         eTgt.classList.add('json-diver-active')
         eSrc.classList.add('json-diver-active')
+        
+        eTgt.scrollIntoView()
     })
 
     function build_on_click_handler(eTgt) {
