@@ -213,42 +213,18 @@ window.onload = function() {
         return what != null && what instanceof Array
     }
 
-    eDoc.addEventListener('input', function() {
+    function analyseDoc() {
         json = JSON.parse(eDoc.value)
         jsonDecorated = decorate_json(json)
         eHtmlDoc.innerHTML = ''
         build_json_tree(jsonDecorated, eHtmlDoc)
-        
+    }
+
+    eDoc.addEventListener('input', function() {
+        analyseDoc()
         applypattern()
     })
 
-/*
-    var t = jjpet.parse('{_:42}')
-    var tw = visitor.visit(t, ast_decorator)
-    var f = jjpet.generate(tw)
-    var n = {id__: "1", value__: {a: { id__: "2", value__: 42}}}
-    console.log(f(n))
-
-    var fw = jjpet.generate(visitor.visit(jjpet.parse('[*, 42]'), ast_decorator))
-    var nw = decorate_json([42])
-    fw(nw)
-
-    var fw = jjpet.generate(visitor.visit(jjpet.parse('[*, (?<c>_), 42]'), ast_decorator))
-    var nw = decorate_json([1, "string", 42])
-    fw(nw)
-
-    var fw = jjpet.generate(visitor.visit(jjpet.parse('<{"k": (?<c>_)}>/g'), ast_decorator))
-    var nw = decorate_json([1, {"notk": "foo"}, {"k": "bar"}, 42, {"a": "k", "k": "nice"}])
-    fw(nw)
-
-    var fw = jjpet.generate(visitor.visit(jjpet.parse('<!{"k": (?<c>_)}!>/g'), ast_decorator))
-    var nw = decorate_json([1, {"notk": "foo"}, {"k": "bar"}, 42, {"a": "k", "k": "nice"}])
-    fw(nw)
-    var nw = decorate_json([1, {"notk": "foo"}, {"k": "bar"}, 42, {"a": "k", "k": "nice"}, [1, 2, {"notk": [3, 4, {"k": "deeeep"}, 5]}]])
-    fw(nw)
-
-    var fw = generator.generate(visitor.visit(jjpet.parse('<!(?<l>[*, 42])!>/g'), ast_decorator))
-    var nw = decorate_json({"a": [1, 42], "b": [2, 42], "c": [{"c1": false}, {"c2": [3, 42]}, 42], "d": {}})
-    fw(nw)
-*/
+    analyseDoc()
+    analyzeinput()
 }
