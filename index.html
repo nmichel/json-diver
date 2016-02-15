@@ -15,7 +15,8 @@
   
   <body>
     <div id="texts">
-      <textarea id="text_doc">[
+      <div class="json-diver-panel text">
+        <textarea id="text_doc">[
           {
             "number": 1,
             "lcn": 2,
@@ -300,12 +301,16 @@
               }
             ]
           }
-        ]</textarea>
-      <textarea id="text_cap" readonly></textarea>
+        ]
+        </textarea>
+      </div>
+      <div class="json-diver-panel text">
+        <textarea id="text_cap" readonly></textarea>
+      </div>
     </div>
     <div id="htmls">
-      <div id="html_doc"></div>
-      <div id="html_cap"></div>
+      <div class="json-diver-panel tree"><div id="html_doc"></div></div>
+      <div class="json-diver-panel tree"><div id="html_cap"></div></div>
     </div>
     <div id="inputs">
       <input id="pattern" type="text" value="<!{&quot;ip_multicast&quot;:(?<ip>#&quot;.*1$&quot;), &quot;pids&quot;: (?<c>_)}!>/g"></input>

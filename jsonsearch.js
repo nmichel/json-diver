@@ -182,11 +182,13 @@ window.onload = function() {
 
         try {
             var ast = jjpet.parse(p)
-            ePattern.style.color = 'green'
+            ePattern.classList.remove('json-diver-ko')
+            ePattern.classList.add('json-diver-ok')
             applypattern()
         }
         catch (e) {
-            ePattern.style.color = 'red'
+            ePattern.classList.add('json-diver-ko')
+            ePattern.classList.remove('json-diver-ok')
         }
     }
 
