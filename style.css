@@ -80,6 +80,7 @@ div > .tree:nth-child(2) {
     border: none;
     border-bottom: solid 3px #A0A0A0;
     font-size: 1.3em;
+    height: 5em;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     width: 100%;
