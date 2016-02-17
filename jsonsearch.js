@@ -234,10 +234,18 @@ window.onload = function() {
     }
 
     function analyzeDoc() {
-        json = JSON.parse(eDoc.value)
-        jsonDecorated = decorate_json(json)
-        eHtmlDoc.innerHTML = ''
-        build_json_tree(jsonDecorated, eHtmlDoc)
+        try {
+            json = JSON.parse(eDoc.value)
+            jsonDecorated = decorate_json(json)
+            eHtmlDoc.innerHTML = ''
+            build_json_tree(jsonDecorated, eHtmlDoc)
+            eDoc.classList.remove('json-diver-ko')
+            eDoc.classList.add('json-diver-ok')
+        }
+        catch (e) {
+            eDoc.classList.add('json-diver-ko')
+            eDoc.classList.remove('json-diver-ok')
+        }
     }
 
     eDoc.addEventListener('input', function() {

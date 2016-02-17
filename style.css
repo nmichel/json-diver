@@ -7,7 +7,7 @@ body {
     width: 50%;
     float: left;
     overflow-y: scroll;
-    background-color: A0A0A0;
+    background-color: #A0A0A0;
 }
 
 .text {
@@ -16,6 +16,7 @@ body {
 }
 
 #texts {
+    box-sizing: border-box;
     width: 100%;
 }
 
@@ -25,7 +26,21 @@ body {
     width: 100%;
 }
 
+#text_doc {
+    border: none;
+    border-bottom: solid 3px #A0A0A0;
+}
+
+#text_doc:focus {
+    border-bottom: solid 2px rgb(250, 250, 0);
+    outline: none;
+    transition: border-color 0.5s;
+}
+
 #text_cap {
+    background-color: #A0A0A0;
+    border: none;
+    outline: none;
     position: absolute;
     right: 0;
 }
@@ -45,13 +60,12 @@ body {
 
 #inputs {
     clear: both;
-    padding: 10px 0 10px 0;
     width: 100%;
 }
 
 #pattern {
     border: none;
-    border-bottom: solid 2px #A0A0A0;
+    border-bottom: solid 3px #A0A0A0;
     font-size: 1.3em;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
@@ -59,7 +73,7 @@ body {
 }
 #pattern:focus {
     border: none;
-    border-bottom: solid 2px rgb(130, 173, 211);
+    border-bottom: solid 2px rgb(250, 250, 0);
     outline: none;
     transition: border-color 0.5s;
 }
