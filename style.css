@@ -1,21 +1,26 @@
 body {
+    display: flex;
+    flex-direction: column;
     font-family: 'Roboto';
     font-style: normal;
 }
 
 .json-diver-panel {
-    width: 50%;
-    float: left;
+    background-color: #A0A0A0;
+    display: inline-block;
     overflow-y: scroll;
-    background-color: A0A0A0;
+    width: 50%;
 }
 
 .text {
-    height: 10%;
+    box-sizing: border-box;
+    height: 5em;
     position: relative;
 }
 
 #texts {
+    display: flex;
+    box-sizing: border-box;
     width: 100%;
 }
 
@@ -25,17 +30,40 @@ body {
     width: 100%;
 }
 
+#text_doc {
+    border: none;
+    border-bottom: solid 3px #A0A0A0;
+}
+
+#text_doc:focus {
+    border: none;
+    border-bottom: solid 3px rgb(250, 250, 0);
+    outline: none;
+    transition: border-color 0.5s;
+}
+
 #text_cap {
+    background-color: #A0A0A0;
+    border: none;
+    outline: none;
     position: absolute;
     right: 0;
 }
 
 .tree {
-    height: 80%;
+    display: inline-block;
+    height: 100%;
+    position: absolute;
+}
+
+div > .tree:nth-child(2) {
+    left: 50%;
 }
 
 #htmls {
+    position: relative;
     clear: both;
+    flex: 1;
 }
 
 #html_doc, #html_cap {
@@ -45,21 +73,21 @@ body {
 
 #inputs {
     clear: both;
-    padding: 10px 0 10px 0;
     width: 100%;
 }
 
 #pattern {
     border: none;
-    border-bottom: solid 2px #A0A0A0;
+    border-bottom: solid 3px #A0A0A0;
     font-size: 1.3em;
+    height: 5em;
     padding-bottom: 0.5em;
     padding-top: 0.5em;
     width: 100%;
 }
 #pattern:focus {
     border: none;
-    border-bottom: solid 2px rgb(130, 173, 211);
+    border-bottom: solid 3px rgb(250, 250, 0);
     outline: none;
     transition: border-color 0.5s;
 }
