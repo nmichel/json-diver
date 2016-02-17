@@ -60,7 +60,7 @@ window.onload = function() {
         eRoot.setAttribute('class', 'json-diver-object')
 
         var eContent = document.createElement('div')
-        
+
         var eCtrl = document.createElement('i')
         eCtrl.setAttribute('class', 'fa fa-minus-square-o')
         eCtrl.addEventListener('click', build_on_click_handler(eContent))
@@ -95,8 +95,7 @@ window.onload = function() {
         var eCtrl = document.createElement('i')
         eCtrl.setAttribute('class', 'fa fa-minus-square-o')
         eCtrl.addEventListener('click', build_on_click_handler(eContent))
-        eRoot.appendChild(eCtrl)
-        
+
         for (var i = 0; i < v.length; ++i) {
             var ePair = document.createElement('div')
             ePair.setAttribute('class', 'json-diver-pair')
@@ -142,6 +141,39 @@ window.onload = function() {
         eRoot.appendChild(eNode)
     }
 
+    var build_cap_json_tree_object = function(v, eRoot) {
+        eRoot.setAttribute('class', 'json-diver-object')
+
+        var eContent = document.createElement('div')
+
+        var eCtrl = document.createElement('i')
+        eCtrl.setAttribute('class', 'fa fa-minus-square-o')
+        eCtrl.addEventListener('click', build_on_click_handler(eContent))
+        
+        for (var k in v) {
+            var ePair = document.createElement('div')
+            ePair.setAttribute('class', 'json-diver-pair')
+            
+            var eKey = document.createElement('div')
+            eKey.setAttribute('class', 'json-diver-key')
+            eKey.innerHTML = k
+            ePair.appendChild(eKey)
+
+            var eValue = document.createElement('div')
+            build_json_tree_list(v[k], eValue)
+            
+            var eOuterValue = document.createElement('div')
+            eOuterValue.setAttribute('class', 'json-diver-value')
+
+            eOuterValue.appendChild(eValue)
+            ePair.appendChild(eOuterValue)
+            eContent.appendChild(ePair)
+        }
+        
+        eRoot.appendChild(eCtrl)
+        eRoot.appendChild(eContent)
+    }
+
     function applypattern() {
         if (! jsonDecorated) {
             return // <== 
@@ -159,19 +191,7 @@ window.onload = function() {
             eCap.value = JSON.stringify(f(json))
 
             eHtmlCap.innerHTML = ''
-            for (var k in r.captures) {
-                var pair = document.createElement('div'),
-                    key = document.createElement('div'),
-                    vals = document.createElement('div')
-                key.innerHTML = k
-                pair.appendChild(key)
-                pair.appendChild(vals)
-                var caps = r.captures[k]
-                for (var i = 0; i < caps.length; ++i) {
-                    build_json_tree(caps[i], vals)
-                }
-                eHtmlCap.appendChild(pair)
-            }
+            build_cap_json_tree_object(r.captures, eHtmlCap)
         }
         catch (e) {
         }
@@ -213,7 +233,7 @@ window.onload = function() {
         return what != null && what instanceof Array
     }
 
-    function analyseDoc() {
+    function analyzeDoc() {
         json = JSON.parse(eDoc.value)
         jsonDecorated = decorate_json(json)
         eHtmlDoc.innerHTML = ''
@@ -221,10 +241,10 @@ window.onload = function() {
     }
 
     eDoc.addEventListener('input', function() {
-        analyseDoc()
+        analyzeDoc()
         applypattern()
     })
 
-    analyseDoc()
+    analyzeDoc()
     analyzeinput()
 }
