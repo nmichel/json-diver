@@ -14,25 +14,37 @@
   </head>
   
   <body>
-    <div id="texts">
-      <div class="json-diver-panel text">
-        <textarea id="text_doc">
-["edit", "your", {"valid": true,
-                  "json": ["data", "here"]},
-                  "in", "real",
-                  ["time"]]
-        </textarea>
-      </div>
-      <div class="json-diver-panel text">
-        <textarea id="text_cap" readonly></textarea>
-      </div>
+    <div id="history">
+      <div class="json-diver-hist-entry">test1</div>
+      <div class="json-diver-hist-entry">test2</div>
+      <div class="json-diver-hist-entry">test3</div>
+      <div class="json-diver-hist-entry">test4</div>
+      <div class="json-diver-hist-entry">test5</div>
+      <div class="json-diver-hist-entry">test6</div>
     </div>
-    <div id="htmls">
-      <div class="json-diver-panel tree"><div id="html_doc"></div></div>
-      <div class="json-diver-panel tree"><div id="html_cap"></div></div>
-    </div>
-    <div id="inputs">
-      <textarea id="pattern"><!(?<4letterswords>#&quot;^[a-z]{4}&quot;)!>/g</textarea>
+    <div id="edit">
+      <div id="texts">
+        <div class="json-diver-panel text">
+          <textarea id="text_doc">
+  ["edit", "your", {"valid": true,
+                    "json": ["data", "here"]},
+                    "in", "real",
+                    ["time"]]
+          </textarea>
+        </div>
+        <div class="json-diver-panel text">
+          <textarea id="text_cap" readonly></textarea>
+        </div>
+      </div>
+      <div id="htmls">
+        <div class="json-diver-panel tree"><div id="html_doc"></div></div>
+        <div class="json-diver-panel tree"><div id="html_cap"></div></div>
+      </div>
+      <div id="inputs">
+        <textarea id="pattern"><!(?<4letterswords>#&quot;^[a-z]{4}$&quot;)!>/g</textarea>
+        <textarea id="comment">Select all 4 letters strings in all document</textarea>
+        <button id="save">save</button>
+      </div>
     </div>
   </body>
 </html>
