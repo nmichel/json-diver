@@ -10,7 +10,11 @@ window.onload = function() {
         eHtmlCap = document.getElementById('html_cap'),
         tm = null,
         json = null,
-        jsonDecorated = null
+        jsonDecorated = null,
+        eComment = document.getElementById('comment'),
+        history = [],
+        counter = 10,
+        eHistory = document.getElementById('history')
 
     eHtmlCap.addEventListener('click', function(e) {
         var eSrc = e.srcElement,
@@ -252,6 +256,54 @@ window.onload = function() {
         analyzeDoc()
         applypattern()
     })
+    
+    function push_in_history() {
+        history.push({
+            id: counter,
+            json: eDoc.value,
+            pattern: ePattern.value
+        })
+        return counter++
+    }
+
+    function remove_from_history(id) {
+        for (var i = 0; i < history.length; ++i) {
+            var entry = history[i]
+            if (id === entry.id) {
+                history.splice(i,1)
+                return // <== 
+            }
+            
+        }
+    }
+    
+    function cb_delete_history_entry(e) {
+        var id = e.srcElement.getAttribute('hist_id'),
+            histEntry = e.srcElement.parentElement
+            
+        remove_from_history(parseInt(id))
+        histEntry.parentElement.removeChild(histEntry)
+    }
+
+    function build_history_entry(id) {
+        var eHEntry = document.createElement('div'),
+            eHEntryDel = document.createElement('div')
+            
+        eHEntryDel.classList.add('fa','fa-times')
+        eHEntryDel.setAttribute('hist_id', ''+id)
+        eHEntryDel.addEventListener('click', cb_delete_history_entry)
+        
+        eHEntry.classList.add('json-diver-hist-entry')
+        eHEntry.textContent = eComment.value
+        eHEntry.appendChild(eHEntryDel)
+        return eHEntry
+    }
+    
+    var eSave = document.getElementById('save')
+    eSave.addEventListener('click', function() {
+        eHistory.insertBefore(build_history_entry(push_in_history()), eHistory.firstChild)
+    })
+
 
     analyzeDoc()
     analyzeinput()
