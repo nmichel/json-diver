@@ -256,13 +256,17 @@ window.onload = function() {
         analyzeDoc()
         applypattern()
     })
-    
-    function push_in_history() {
-        history.push({
+
+    function new_history_entry(counter, doc, pattern) {
+        return {
             id: counter,
-            json: eDoc.value,
-            pattern: ePattern.value
-        })
+            json: doc,
+            pattern: pattern
+        }
+    }
+
+    function push_in_history(entry) {
+        history.push(entry)
         return counter++
     }
 
@@ -273,35 +277,66 @@ window.onload = function() {
                 history.splice(i,1)
                 return // <== 
             }
+        }
+    }
+
+    function find_in_history(id) {
+        for (var i = 0; i < history.length; ++i) {
+            var entry = history[i]
+            if (id === entry.id) {
+                return entry // <== 
+            }
             
         }
+        
+        return null // <== 
+    }
+
+    function cb_load_history_entry(e) {
+        var id = e.srcElement.getAttribute('hist_id'),
+            entry = find_in_history(parseInt(id))
+
+        eDoc.value = entry.json
+        ePattern.value = entry.pattern
+        
+        analyzeDoc()
+        analyzeinput()
     }
     
     function cb_delete_history_entry(e) {
         var id = e.srcElement.getAttribute('hist_id'),
             histEntry = e.srcElement.parentElement
-            
+
         remove_from_history(parseInt(id))
         histEntry.parentElement.removeChild(histEntry)
     }
 
-    function build_history_entry(id) {
+    function build_history_entry(id, text) {
         var eHEntry = document.createElement('div'),
             eHEntryDel = document.createElement('div')
-            
+
         eHEntryDel.classList.add('fa','fa-times')
         eHEntryDel.setAttribute('hist_id', ''+id)
         eHEntryDel.addEventListener('click', cb_delete_history_entry)
-        
+
         eHEntry.classList.add('json-diver-hist-entry')
-        eHEntry.textContent = eComment.value
+        eHEntry.setAttribute('hist_id', ''+id)
+        eHEntry.textContent = text
+        eHEntry.addEventListener('click', cb_load_history_entry)
+        
         eHEntry.appendChild(eHEntryDel)
         return eHEntry
     }
-    
+
+    function add_history_entry(id, text) {
+        eHistory.insertBefore(build_history_entry(id, text), eHistory.firstChild)
+    }
+
     var eSave = document.getElementById('save')
     eSave.addEventListener('click', function() {
-        eHistory.insertBefore(build_history_entry(push_in_history()), eHistory.firstChild)
+        var entry = new_history_entry(counter, eDoc.value, ePattern.value),
+            eid = push_in_history(entry)
+        add_history_entry(eid, eComment.value)
     })
 
 
