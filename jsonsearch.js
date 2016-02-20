@@ -257,11 +257,12 @@ window.onload = function() {
         applypattern()
     })
 
-    function new_history_entry(counter, doc, pattern) {
+    function new_history_entry(counter, doc, pattern, comment) {
         return {
             id: counter,
             json: doc,
-            pattern: pattern
+            pattern: pattern,
+            comment: comment
         }
     }
 
@@ -298,7 +299,8 @@ window.onload = function() {
 
         eDoc.value = entry.json
         ePattern.value = entry.pattern
-        
+        eComment.value = entry.comment
+
         analyzeDoc()
         analyzeinput()
     }
@@ -311,8 +313,10 @@ window.onload = function() {
         histEntry.parentElement.removeChild(histEntry)
     }
 
-    function build_history_entry(id, text) {
-        var eHEntry = document.createElement('div'),
+    function build_history_entry(entry) {
+        var id = entry.id,
+            text = entry.comment,
+            eHEntry = document.createElement('div'),
             eHEntryDel = document.createElement('div')
 
         eHEntryDel.classList.add('fa','fa-times')
@@ -328,18 +332,45 @@ window.onload = function() {
         return eHEntry
     }
 
-    function add_history_entry(id, text) {
-        eHistory.insertBefore(build_history_entry(id, text), eHistory.firstChild)
+    function add_history_entry(entry) {
+        eHistory.insertBefore(build_history_entry(entry), eHistory.firstChild)
     }
 
-    var eSave = document.getElementById('save')
-    eSave.addEventListener('click', function() {
-        var entry = new_history_entry(counter, eDoc.value, ePattern.value),
+    function cb_save_current_state() {
+        var entry = new_history_entry(counter, eDoc.value, ePattern.value, eComment.value),
             eid = push_in_history(entry)
         add_history_entry(eid, eComment.value)
-    })
+    }
+    
+    var eSave = document.getElementById('save')
+    eSave.addEventListener('click', cb_save_current_state)
 
+    /* Preset history
+    */
+    var preset = [
+        {json: '["edit", "your", {"valid": true,\
+                    "json": ["data", "here"]},\
+                    "in", "real",\
+                    ["time"]]', pattern: '<!(?<4letterswords>#"^[a-z]{4}$")!>/g', comment: 'Select all 4 letters strings in all document'},
+        {json: '[{"neh": {"foo": true}},\
+                 {"foo": "match1"},\
+                 {"bar": "foo", "foo": ["match", "2"]},\
+                 "foo",\
+                 {"1": "a", "2": false, "foo": "match3"}]', pattern: '<{"foo": (?<val>_)}>/g', comment: 'Match and capture values of all (/g) objects with a "foo" key'},
+        {json: '{"bar": 42, "foo": [1, 2]}', pattern: '{"foo": (?<val>_)}', comment: 'Match an object with a key "foo" an capture the value'},
+        {json: '[1, 42]', pattern: '[_, 42]', comment: 'Match a 2 entries list endings with 42'}
+    ]
 
+    for (var i = 0; i < preset.length; ++i) {
+        var e = preset[i],
+            entry = new_history_entry(counter, e.json, e.pattern, e.comment)
+
+        push_in_history(entry)
+        add_history_entry(entry)
+    }
+
+    /* Analyze initial values 
+    */
     analyzeDoc()
     analyzeinput()
 }
