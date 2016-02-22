@@ -12,14 +12,69 @@ body {
     background-color: #1D68AB;
     padding: 0.5em 1em 1em 1em;
     margin-bottom: 10px;
+    position: relative;
     text-shadow: 1px 1px 1px #AAF;
 }
 #header > h1 {
     margin: 0;
 }
+
 #header > div {
     text-align: right;
     text-shadow: none;
+}
+
+#help_btn {
+    background-color: #A0A0A0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    bottom: 0;
+    position: absolute;
+    padding: 5px 10px 5px 10px;
+    text-transform: uppercase;
+}
+#help_btn:hover {
+    box-shadow: 0px -4px 4px -1px rgba(0, 0, 0, 0.5);
+}
+
+/* ----- */
+
+#help_frame {
+    background-color: rgba(0, 0, 0, 0.8);
+    display: none;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+}
+
+#help {
+    background-color: #1D68AB;
+    box-shadow: 0px 0px 5px 5px rgba(0, 0, 0, 0.5);
+    height: 80%;
+    margin-left: 10%;
+    margin-top: 10%;
+    position: absolute;
+    width: 80%;
+}
+
+.jd-help-entry {
+    float: left;
+}
+
+.jd-help-entry-p {
+    background-color: #BDFFAE;
+    display: inline-block;
+    margin: 10px 0px 10px 10px;
+    padding: 10px 10px 10px 10px;
+}
+
+.jd-help-entry-h {
+    background-color: rgb(130, 173, 211);
+    display: inline-block;
+    margin: 10px 10px 10px 0px;
+    padding: 10px 10px 10px 10px;
 }
 
 /* ----- */

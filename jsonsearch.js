@@ -18,7 +18,10 @@ window.onload = function() {
         eCurtainDoc = document.getElementById('html_doc_curtain'),
         eCurtainCap = document.getElementById('html_cap_curtain'),
         isDocValid = false,
-        isPatternValid = false
+        isPatternValid = false,
+        eHelpBtn = document.getElementById('help_btn'),
+        eHelp = document.getElementById('help'),
+        eHelpFrame = document.getElementById('help_frame')
 
     function toggle_curtain(show, eC) {
         var pval = show ? 'inherit' : 'none'
@@ -37,6 +40,25 @@ window.onload = function() {
         toggle_doc_curtain(! isDocValid)
         toggle_cap_curtain(!(isDocValid && isPatternValid))
     }
+
+    function show_help() {
+        eHelpFrame.style.display = 'inherit'
+    }
+    
+    function hide_help() {
+        eHelpFrame.style.display = 'none'
+    }
+    
+    function cb_help_btn() {
+        show_help()
+    }
+
+    function cb_help() {
+        hide_help()
+    }
+
+    eHelpBtn.addEventListener('click', cb_help_btn)
+    eHelp.addEventListener('click', cb_help)
 
     eHtmlCap.addEventListener('click', function(e) {
         var eSrc = e.srcElement,
@@ -399,6 +421,49 @@ window.onload = function() {
         add_history_entry(entry)
     }
 
+    /* Hill help
+    */
+    
+    var help = [
+        {p: '"foo"', h: 'string "foo"'},
+        {p: '#"regex"', h: 'string maching "regex"'},
+        {p: '[]', h: 'empty list'},
+        {p: '[*]', h: 'any list'},
+        {p: '[*, 42]', h: 'list ending with 42'},
+        {p: '[*, exp]', h: 'list ending with something matching exp'},
+        {p: '{}', h: 'any object'},
+        {p: '{"foo": _}', h: 'object with key "foo"'},
+        {p: '{_: exp}', h: 'object with a key which value match pattern exp'},
+        {p: '<42>', h: 'list containing 42 or object with a value 42'},
+        {p: '<!(?<>42)!>/g', h: 'json with a least a 42 as a value; capture the all'}
+    ]
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+    
+    function build_help_entry(e) {
+        var c = document.createElement('div'),
+            cp = document.createElement('div'),
+            ch = document.createElement('div')
+
+        cp.innerHTML = escapeHtml(e.p)
+        cp.classList.add('jd-help-entry-p')
+        ch.innerHTML = 'match ' + e.h
+        ch.classList.add('jd-help-entry-h')
+        c.appendChild(cp)
+        c.appendChild(ch)
+        c.classList.add('jd-help-entry')
+        
+        return c
+    }
+
+    help.forEach(function(item){
+        eHelp.appendChild(build_help_entry(item))
+    })
+    
     /* Analyze initial values 
     */
     analyze_doc()
