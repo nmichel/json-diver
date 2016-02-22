@@ -5,9 +5,27 @@ body {
     position: relative;
 }
 
+/* ----- */
+
+#header {
+    color: #F0F0F0;
+    background-color: #1D68AB;
+    padding: 0.5em 1em 1em 1em;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 1px #AAF;
+}
+#header > h1 {
+    margin: 0;
+}
+#header > div {
+    text-align: right;
+    text-shadow: none;
+}
+
+/* ----- */
+
 #history {
     box-sizing: border-box;
-    background-color: #909090;
     height: 100%;
     overflow-y: scroll;
     padding: 0 5px 0 0px;
