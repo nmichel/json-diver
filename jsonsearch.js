@@ -337,9 +337,9 @@ window.onload = function() {
     }
 
     function cb_save_current_state() {
-        var entry = new_history_entry(counter, eDoc.value, ePattern.value, eComment.value),
-            eid = push_in_history(entry)
-        add_history_entry(eid, eComment.value)
+        var entry = new_history_entry(counter, eDoc.value, ePattern.value, eComment.value)
+        push_in_history(entry)
+        add_history_entry(entry)
     }
     
     var eSave = document.getElementById('save')

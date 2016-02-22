@@ -1,6 +1,6 @@
 body {
     background-color: #A0A0A0;
-    font-family: 'Roboto';
+    font-family:"adelle-sans","Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-style: normal;
     position: relative;
 }
@@ -21,8 +21,8 @@ body {
     border-bottom: solid 1px rgb(130, 173, 211);
     box-sizing: border-box;
     height: 100px;
-    padding: 2px;
     overflow: hidden;
+    padding: 2px;
     position: relative;
     width: 100%;
 }
