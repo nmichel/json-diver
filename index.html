@@ -18,16 +18,18 @@
     </div>
     <div id="edit">
       <div id="texts">
-        <div class="json-diver-panel text">
+        <div class="json-diver-panel">
           <textarea id="text_doc">[1,2]</textarea>
         </div>
-        <div class="json-diver-panel text">
+        <div class="json-diver-panel right">
           <textarea id="text_cap" readonly></textarea>
         </div>
       </div>
       <div id="htmls">
-        <div class="json-diver-panel tree"><div id="html_doc"></div></div>
-        <div class="json-diver-panel tree"><div id="html_cap"></div></div>
+        <div class="json-diver-panel"><div id="html_doc"></div></div>
+        <div id="html_doc_curtain" class="json-diver-panel curtain"></div>
+        <div class="json-diver-panel right"><div id="html_cap"></div></div>
+        <div id="html_cap_curtain" class="json-diver-panel right curtain"></div>
       </div>
       <div id="inputs">
         <textarea id="pattern">[*]</textarea>

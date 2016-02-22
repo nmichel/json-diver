@@ -14,7 +14,29 @@ window.onload = function() {
         eComment = document.getElementById('comment'),
         history = [],
         counter = 10,
-        eHistory = document.getElementById('history')
+        eHistory = document.getElementById('history'),
+        eCurtainDoc = document.getElementById('html_doc_curtain'),
+        eCurtainCap = document.getElementById('html_cap_curtain'),
+        isDocValid = false,
+        isPatternValid = false
+
+    function toggle_curtain(show, eC) {
+        var pval = show ? 'inherit' : 'none'
+        eC.style.display = pval
+    }
+
+    function toggle_doc_curtain(show) {
+        toggle_curtain(show, eCurtainDoc)
+    }
+    
+    function toggle_cap_curtain(show) {
+        toggle_curtain(show, eCurtainCap)
+    }
+    
+    function toggle_curtains() {
+        toggle_doc_curtain(! isDocValid)
+        toggle_cap_curtain(!(isDocValid && isPatternValid))
+    }
 
     eHtmlCap.addEventListener('click', function(e) {
         var eSrc = e.srcElement,
@@ -196,35 +218,40 @@ window.onload = function() {
 
             eHtmlCap.innerHTML = ''
             build_cap_json_tree_object(r.captures, eHtmlCap)
+            toggle_cap_curtain(false)
         }
         catch (e) {
+            toggle_cap_curtain(true)
         }
     }
 
-    function analyzeinput() {
+    function analyze_pattern() {
         var p = ePattern.value 
 
         try {
             var ast = jjpet.parse(p)
             ePattern.classList.remove('json-diver-ko')
             ePattern.classList.add('json-diver-ok')
+            isPatternValid = true
             applypattern()
         }
         catch (e) {
             ePattern.classList.add('json-diver-ko')
             ePattern.classList.remove('json-diver-ok')
+            isPatternValid = false
         }
     }
 
     ePattern.addEventListener('input', function() {
-        window.clearTimeout(tm)
-        analyzeinput()
-        // tm = window.setTimeout(analyzeinput, 300)
+        // window.clearTimeout(tm)
+        analyze_pattern()
+        toggle_curtains()
+        // tm = window.setTimeout(analyze_pattern, 300)
     })
     // ePattern.addEventListener('keydown', function(e) {
     //     if (e.keyCode == 13) {
     //         window.clearTimeout(tm)
-    //         analyzeinput()
+    //         analyze_pattern()
     //         applypattern()
     //     }
     // })
@@ -237,7 +264,7 @@ window.onload = function() {
         return what != null && what instanceof Array
     }
 
-    function analyzeDoc() {
+    function analyze_doc() {
         try {
             json = JSON.parse(eDoc.value)
             jsonDecorated = decorate_json(json)
@@ -245,16 +272,19 @@ window.onload = function() {
             build_json_tree(jsonDecorated, eHtmlDoc)
             eDoc.classList.remove('json-diver-ko')
             eDoc.classList.add('json-diver-ok')
+            isDocValid = true
         }
         catch (e) {
             eDoc.classList.add('json-diver-ko')
             eDoc.classList.remove('json-diver-ok')
+            isDocValid = false
         }
     }
 
     eDoc.addEventListener('input', function() {
-        analyzeDoc()
+        analyze_doc()
         applypattern()
+        toggle_curtains()
     })
 
     function new_history_entry(counter, doc, pattern, comment) {
@@ -301,8 +331,8 @@ window.onload = function() {
         ePattern.value = entry.pattern
         eComment.value = entry.comment
 
-        analyzeDoc()
-        analyzeinput()
+        analyze_doc()
+        analyze_pattern()
     }
     
     function cb_delete_history_entry(e) {
@@ -371,6 +401,6 @@ window.onload = function() {
 
     /* Analyze initial values 
     */
-    analyzeDoc()
-    analyzeinput()
+    analyze_doc()
+    analyze_pattern()
 }
