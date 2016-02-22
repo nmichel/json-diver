@@ -14,25 +14,49 @@
   </head>
   
   <body>
-    <div id="texts">
-      <div class="json-diver-panel text">
-        <textarea id="text_doc">
-["edit", "your", {"valid": true,
-                  "json": ["data", "here"]},
-                  "in", "real",
-                  ["time"]]
-        </textarea>
+    <div id="header">
+      <h1>JSON-DIVER</h1>
+      <div>
+      source code on <a href="https://github.com/nmichel/json-diver">github.com/nmichel/json-diver</a>
       </div>
-      <div class="json-diver-panel text">
-        <textarea id="text_cap" readonly></textarea>
+      <div>
+      powered by <a href="https://github.com/nmichel/ejpet">ejpet</a> and <a href="https://github.com/nmichel/jjpet">jjpet</a>
+      </div>
+      <div>
+      pattern <a href="https://github.com/nmichel/ejpet#expression-syntax">syntax</a>
+      </div>
+      <span id="help_btn">help</span>
+    </div>
+
+    <div id="help_frame">
+      <div id="help">
       </div>
     </div>
-    <div id="htmls">
-      <div class="json-diver-panel tree"><div id="html_doc"></div></div>
-      <div class="json-diver-panel tree"><div id="html_cap"></div></div>
-    </div>
-    <div id="inputs">
-      <textarea id="pattern"><!(?<4letterswords>#&quot;^[a-z]{4}&quot;)!>/g</textarea>
+    
+    <div id="editor">
+      <div id="history">
+      </div>
+      <div id="edit">
+        <div id="texts">
+          <div class="json-diver-panel">
+            <textarea id="text_doc">[1,2]</textarea>
+          </div>
+          <div class="json-diver-panel right">
+            <textarea id="text_cap" readonly></textarea>
+          </div>
+        </div>
+        <div id="htmls">
+          <div class="json-diver-panel"><div id="html_doc"></div></div>
+          <div id="html_doc_curtain" class="json-diver-panel curtain"></div>
+          <div class="json-diver-panel right"><div id="html_cap"></div></div>
+          <div id="html_cap_curtain" class="json-diver-panel right curtain"></div>
+        </div>
+        <div id="inputs">
+          <textarea id="pattern">[*]</textarea>
+          <textarea id="comment">Enjoy !</textarea>
+          <button id="save">save</button>
+        </div>
+      </div>
     </div>
   </body>
 </html>

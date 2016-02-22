@@ -10,7 +10,55 @@ window.onload = function() {
         eHtmlCap = document.getElementById('html_cap'),
         tm = null,
         json = null,
-        jsonDecorated = null
+        jsonDecorated = null,
+        eComment = document.getElementById('comment'),
+        history = [],
+        counter = 10,
+        eHistory = document.getElementById('history'),
+        eCurtainDoc = document.getElementById('html_doc_curtain'),
+        eCurtainCap = document.getElementById('html_cap_curtain'),
+        isDocValid = false,
+        isPatternValid = false,
+        eHelpBtn = document.getElementById('help_btn'),
+        eHelp = document.getElementById('help'),
+        eHelpFrame = document.getElementById('help_frame')
+
+    function toggle_curtain(show, eC) {
+        var pval = show ? 'inherit' : 'none'
+        eC.style.display = pval
+    }
+
+    function toggle_doc_curtain(show) {
+        toggle_curtain(show, eCurtainDoc)
+    }
+    
+    function toggle_cap_curtain(show) {
+        toggle_curtain(show, eCurtainCap)
+    }
+    
+    function toggle_curtains() {
+        toggle_doc_curtain(! isDocValid)
+        toggle_cap_curtain(!(isDocValid && isPatternValid))
+    }
+
+    function show_help() {
+        eHelpFrame.style.display = 'inherit'
+    }
+    
+    function hide_help() {
+        eHelpFrame.style.display = 'none'
+    }
+    
+    function cb_help_btn() {
+        show_help()
+    }
+
+    function cb_help() {
+        hide_help()
+    }
+
+    eHelpBtn.addEventListener('click', cb_help_btn)
+    eHelp.addEventListener('click', cb_help)
 
     eHtmlCap.addEventListener('click', function(e) {
         var eSrc = e.srcElement,
@@ -192,35 +240,40 @@ window.onload = function() {
 
             eHtmlCap.innerHTML = ''
             build_cap_json_tree_object(r.captures, eHtmlCap)
+            toggle_cap_curtain(false)
         }
         catch (e) {
+            toggle_cap_curtain(true)
         }
     }
 
-    function analyzeinput() {
+    function analyze_pattern() {
         var p = ePattern.value 
 
         try {
             var ast = jjpet.parse(p)
             ePattern.classList.remove('json-diver-ko')
             ePattern.classList.add('json-diver-ok')
+            isPatternValid = true
             applypattern()
         }
         catch (e) {
             ePattern.classList.add('json-diver-ko')
             ePattern.classList.remove('json-diver-ok')
+            isPatternValid = false
         }
     }
 
     ePattern.addEventListener('input', function() {
-        window.clearTimeout(tm)
-        analyzeinput()
-        // tm = window.setTimeout(analyzeinput, 300)
+        // window.clearTimeout(tm)
+        analyze_pattern()
+        toggle_curtains()
+        // tm = window.setTimeout(analyze_pattern, 300)
     })
     // ePattern.addEventListener('keydown', function(e) {
     //     if (e.keyCode == 13) {
     //         window.clearTimeout(tm)
-    //         analyzeinput()
+    //         analyze_pattern()
     //         applypattern()
     //     }
     // })
@@ -233,7 +286,7 @@ window.onload = function() {
         return what != null && what instanceof Array
     }
 
-    function analyzeDoc() {
+    function analyze_doc() {
         try {
             json = JSON.parse(eDoc.value)
             jsonDecorated = decorate_json(json)
@@ -241,18 +294,178 @@ window.onload = function() {
             build_json_tree(jsonDecorated, eHtmlDoc)
             eDoc.classList.remove('json-diver-ko')
             eDoc.classList.add('json-diver-ok')
+            isDocValid = true
         }
         catch (e) {
             eDoc.classList.add('json-diver-ko')
             eDoc.classList.remove('json-diver-ok')
+            isDocValid = false
         }
     }
 
     eDoc.addEventListener('input', function() {
-        analyzeDoc()
+        analyze_doc()
         applypattern()
+        toggle_curtains()
     })
 
-    analyzeDoc()
-    analyzeinput()
+    function new_history_entry(counter, doc, pattern, comment) {
+        return {
+            id: counter,
+            json: doc,
+            pattern: pattern,
+            comment: comment
+        }
+    }
+
+    function push_in_history(entry) {
+        history.push(entry)
+        return counter++
+    }
+
+    function remove_from_history(id) {
+        for (var i = 0; i < history.length; ++i) {
+            var entry = history[i]
+            if (id === entry.id) {
+                history.splice(i,1)
+                return // <== 
+            }
+        }
+    }
+
+    function find_in_history(id) {
+        for (var i = 0; i < history.length; ++i) {
+            var entry = history[i]
+            if (id === entry.id) {
+                return entry // <== 
+            }
+            
+        }
+        
+        return null // <== 
+    }
+
+    function cb_load_history_entry(e) {
+        var id = e.srcElement.getAttribute('hist_id'),
+            entry = find_in_history(parseInt(id))
+
+        eDoc.value = entry.json
+        ePattern.value = entry.pattern
+        eComment.value = entry.comment
+
+        analyze_doc()
+        analyze_pattern()
+    }
+    
+    function cb_delete_history_entry(e) {
+        var id = e.srcElement.getAttribute('hist_id'),
+            histEntry = e.srcElement.parentElement
+
+        remove_from_history(parseInt(id))
+        histEntry.parentElement.removeChild(histEntry)
+    }
+
+    function build_history_entry(entry) {
+        var id = entry.id,
+            text = entry.comment,
+            eHEntry = document.createElement('div'),
+            eHEntryDel = document.createElement('div')
+
+        eHEntryDel.classList.add('fa','fa-times')
+        eHEntryDel.setAttribute('hist_id', ''+id)
+        eHEntryDel.addEventListener('click', cb_delete_history_entry)
+
+        eHEntry.classList.add('json-diver-hist-entry')
+        eHEntry.setAttribute('hist_id', ''+id)
+        eHEntry.textContent = text
+        eHEntry.addEventListener('click', cb_load_history_entry)
+        
+        eHEntry.appendChild(eHEntryDel)
+        return eHEntry
+    }
+
+    function add_history_entry(entry) {
+        eHistory.insertBefore(build_history_entry(entry), eHistory.firstChild)
+    }
+
+    function cb_save_current_state() {
+        var entry = new_history_entry(counter, eDoc.value, ePattern.value, eComment.value)
+        push_in_history(entry)
+        add_history_entry(entry)
+    }
+    
+    var eSave = document.getElementById('save')
+    eSave.addEventListener('click', cb_save_current_state)
+
+    /* Preset history
+    */
+    var preset = [
+        {json: '["edit", "your", {"valid": true,\
+                    "json": ["data", "here"]},\
+                    "in", "real",\
+                    ["time"]]', pattern: '<!(?<4letterswords>#"^[a-z]{4}$")!>/g', comment: 'Select all 4 letters strings in all document'},
+        {json: '[{"neh": {"foo": true}},\
+                 {"foo": "match1"},\
+                 {"bar": "foo", "foo": ["match", "2"]},\
+                 "foo",\
+                 {"1": "a", "2": false, "foo": "match3"}]', pattern: '<{"foo": (?<val>_)}>/g', comment: 'Match and capture values of all (/g) objects with a "foo" key'},
+        {json: '{"bar": 42, "foo": [1, 2]}', pattern: '{"foo": (?<val>_)}', comment: 'Match an object with a key "foo" an capture the value'},
+        {json: '[1, 42]', pattern: '[_, 42]', comment: 'Match a 2 entries list endings with 42'}
+    ]
+
+    for (var i = 0; i < preset.length; ++i) {
+        var e = preset[i],
+            entry = new_history_entry(counter, e.json, e.pattern, e.comment)
+
+        push_in_history(entry)
+        add_history_entry(entry)
+    }
+
+    /* Hill help
+    */
+    
+    var help = [
+        {p: '"foo"', h: 'string "foo"'},
+        {p: '#"regex"', h: 'string maching "regex"'},
+        {p: '[]', h: 'empty list'},
+        {p: '[*]', h: 'any list'},
+        {p: '[*, 42]', h: 'list ending with 42'},
+        {p: '[*, exp]', h: 'list ending with something matching exp'},
+        {p: '{}', h: 'any object'},
+        {p: '{"foo": _}', h: 'object with key "foo"'},
+        {p: '{_: exp}', h: 'object with a key which value match pattern exp'},
+        {p: '<42>', h: 'list containing 42 or object with a value 42'},
+        {p: '<!(?<>42)!>/g', h: 'json with a least a 42 as a value; capture the all'}
+    ]
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+    
+    function build_help_entry(e) {
+        var c = document.createElement('div'),
+            cp = document.createElement('div'),
+            ch = document.createElement('div')
+
+        cp.innerHTML = escapeHtml(e.p)
+        cp.classList.add('jd-help-entry-p')
+        ch.innerHTML = 'match ' + e.h
+        ch.classList.add('jd-help-entry-h')
+        c.appendChild(cp)
+        c.appendChild(ch)
+        c.classList.add('jd-help-entry')
+        
+        return c
+    }
+
+    help.forEach(function(item){
+        eHelp.appendChild(build_help_entry(item))
+    })
+    
+    /* Analyze initial values 
+    */
+    analyze_doc()
+    analyze_pattern()
 }
