@@ -21,7 +21,8 @@ window.onload = function() {
         isPatternValid = false,
         eHelpBtn = document.getElementById('help_btn'),
         eHelp = document.getElementById('help'),
-        eHelpFrame = document.getElementById('help_frame')
+        eHelpFrame = document.getElementById('help_frame'),
+        isInteractive = false
 
     function toggle_curtain(show, eC) {
         var pval = show ? 'inherit' : 'none'
@@ -255,7 +256,6 @@ window.onload = function() {
             ePattern.classList.remove('json-diver-ko')
             ePattern.classList.add('json-diver-ok')
             isPatternValid = true
-            applypattern()
         }
         catch (e) {
             ePattern.classList.add('json-diver-ko')
@@ -265,10 +265,11 @@ window.onload = function() {
     }
 
     ePattern.addEventListener('input', function() {
-        // window.clearTimeout(tm)
         analyze_pattern()
+        if (isInteractive) {
+            applypattern()
+        }
         toggle_curtains()
-        // tm = window.setTimeout(analyze_pattern, 300)
     })
     // ePattern.addEventListener('keydown', function(e) {
     //     if (e.keyCode == 13) {
@@ -304,9 +305,11 @@ window.onload = function() {
     }
 
     eDoc.addEventListener('input', function() {
-        analyze_doc()
-        applypattern()
-        toggle_curtains()
+        if (isInteractive) {
+            analyze_doc()
+            applypattern()
+            toggle_curtains()
+        }
     })
 
     function new_history_entry(counter, doc, pattern, comment) {
@@ -354,7 +357,13 @@ window.onload = function() {
         eComment.value = entry.comment
 
         analyze_doc()
-        analyze_pattern()
+        if (isDocValid) {
+            analyze_pattern()
+            if (isPatternValid) {
+                applypattern()
+            }
+        }
+        toggle_curtains()
     }
     
     function cb_delete_history_entry(e) {
@@ -394,9 +403,23 @@ window.onload = function() {
         add_history_entry(entry)
     }
     
-    var eSave = document.getElementById('save')
-    eSave.addEventListener('click', cb_save_current_state)
+    function cb_parse_json() {
+        analyze_doc()
+        if (isDocValid) {
+            analyze_pattern()
+        }
+        toggle_curtains()
+    }
+    
+    function cb_apply_pattern() {
+        applypattern()
+    }
 
+    document.getElementById('save').addEventListener('click', cb_save_current_state)
+    document.getElementById('parse').addEventListener('click', cb_parse_json)
+    document.getElementById('apply').addEventListener('click', cb_apply_pattern)
+
+    
     /* Preset history
     */
     var preset = [
@@ -421,7 +444,7 @@ window.onload = function() {
         add_history_entry(entry)
     }
 
-    /* Hill help
+    /* Fill help
     */
     
     var help = [
@@ -468,4 +491,5 @@ window.onload = function() {
     */
     analyze_doc()
     analyze_pattern()
+    applypattern()
 }
