@@ -185,6 +185,27 @@ body {
     margin: 10px;
 }
 
+.json-diver-btn {
+    opacity: 0.3;
+    border: none;
+    bottom: 0.5em;
+    box-shadow: #F0F0F0 0 0 5px 2px;
+    font-size: 0.8em;
+    margin: 2px;
+    outline: none;
+    position: absolute;
+    right: 0.5em;
+    text-transform: uppercase;
+}
+.json-diver-btn:hover {
+    border: solid 1px rgba(130, 173, 211, 0.5);
+    box-shadow: rgba(0, 0, 0, 0.5) 0 0 20px;
+    opacity: 1;
+    transition: opacity 0.5s;
+}
+
+/* ----- */
+
 #inputs {
     width: 100%;
 }
@@ -208,6 +229,13 @@ body {
     outline: none;
     transition: border-color 0.5s;
 }
+
+#input-pattern {
+    position:relative;
+    height: 100px;
+}
+
+/* ----- */
 
 .curtain {
     display: none;
@@ -290,21 +318,4 @@ i {
 
 .json-diver-ko {
     background-color: #FFAEAE;
-}
-
-/* ----- */
-
-#save {
-    border: none;
-    bottom: 0.5em;
-    box-shadow: #F0F0F0 0 0 5px 2px;
-    font-size: 1.3em;
-    outline: none;
-    position: absolute;
-    right: 0.5em;
-}
-
-#save:hover {
-    border: solid 1px rgba(130, 173, 211, 0.5);
-    box-shadow: rgba(0, 0, 0, 0.5) 0 0 20px;
 }
