@@ -22,7 +22,10 @@ window.onload = function() {
         eHelpBtn = document.getElementById('help_btn'),
         eHelp = document.getElementById('help'),
         eHelpFrame = document.getElementById('help_frame'),
-        isInteractive = false
+        isInteractive = false,
+        thresholdInMs = 1,
+        eParse = document.getElementById('parse'),
+        eApply = document.getElementById('apply')
 
     function toggle_curtain(show, eC) {
         var pval = show ? 'inherit' : 'none'
@@ -287,9 +290,20 @@ window.onload = function() {
         return what != null && what instanceof Array
     }
 
+    function toggle_interactive_mode(onoff) {
+        isInteractive = onoff
+        
+        var show = onoff ? 'none' : 'inherit'
+        eParse.style.display = show
+        eApply.style.display = show
+    }
+    
     function analyze_doc() {
         try {
+            var startT = performance.now()
             json = JSON.parse(eDoc.value)
+            var deltaT = performance.now() - startT
+            toggle_interactive_mode((deltaT < thresholdInMs))
             jsonDecorated = decorate_json(json)
             eHtmlDoc.innerHTML = ''
             build_json_tree(jsonDecorated, eHtmlDoc)
@@ -416,8 +430,8 @@ window.onload = function() {
     }
 
     document.getElementById('save').addEventListener('click', cb_save_current_state)
-    document.getElementById('parse').addEventListener('click', cb_parse_json)
-    document.getElementById('apply').addEventListener('click', cb_apply_pattern)
+    eParse.addEventListener('click', cb_parse_json)
+    eApply.addEventListener('click', cb_apply_pattern)
 
     
     /* Preset history
